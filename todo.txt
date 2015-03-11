@@ -1,0 +1,4 @@
+Check for directories in dst_dir that are not in src_dirs and delete them (after shifting backups but probably before creating new backup)
+Check that nBackups is a number
+Check directory names of user input. (Are they valid names?)
+

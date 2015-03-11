@@ -1,0 +1,20 @@
+I previously tried to introduce the following modification before, but the results were terrible:
+
+
+Replace:
+cp -al "$dst_dir"/Current "$dst_dir"/History/B-1
+with:
+mv "$dst_dir"/Current "$dst_dir"/History/B-1
+
+Add to rsync command:
+--link-dest="$dst_dir"
+
+
+I don't know why, but when backing up from an NTFS partition on one drive to an NTFS drive on another partition (e.g. a partition on my laptop HDD to my single-partition external HDD), this results in the itemized description of each rsync file being "cf...p....." instead of ".f...p.....", and the backups take about 30x longer and take up significantly more space (perhaps even as much space as you'd expect from full, rather than incremental, backups).
+
+I wanted to use --link-dest because it "preserves original permissions and ownerships in the backup", as I first read here: http://www.mikerubel.org/computers/rsync_snapshots/
+
+This problem doesn't arise when I'm backing up from one location to another on an Ext4 partition. Therefore, I think the issue is related to NTFS. I tried adding --modify-window at values up to 5, but this made no noticeable difference.
+
+Thus, while I used mv and --link-dest in rsync_backup versions 5 and 6, I reverted to cp -al and no --link-dest in version 7. In version 8, I added the option to use mv and --link-dest if all of your directories are located in ext filesystems.
+
